@@ -32,7 +32,7 @@ export default async function (req, res, next) {
     }
 
     // req.user에 사용자 정보를 저장합니다.
-    req.user = user;
+    req.locals.user = user;
 
     next();
   } catch (error) {
