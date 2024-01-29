@@ -83,4 +83,20 @@ router.post("/sign-in", async (req, res) => {
   return res.status(200).json({ message: "로그인에 성공하였습니다." });
 });
 
+/** 내정보 조회 **/
+router.get("/myInfo", authMiddleware, async (req, res, next) => {
+  const { userId } = req.user;
+
+  const user = await prisma.users.findFirst({
+    where: { userId: +userId },
+    select: {
+      userId: true,
+      email: true,
+      userName: true,
+    },
+  });
+
+  return res.status(200).json({ data: user });
+});
+
 export default router;

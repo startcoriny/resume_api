@@ -8,6 +8,7 @@ export default async function (req, res, next) {
   try {
     console.log("인증토큰 들어옴");
     const { authorization } = req.cookies;
+    console.log("authorization =>" + authorization);
 
     if (!authorization) throw new Error("토큰이 존재하지 않습니다.");
 
@@ -32,7 +33,7 @@ export default async function (req, res, next) {
     }
 
     // req.user에 사용자 정보를 저장합니다.
-    req.locals.user = user;
+    req.user = user;
 
     next();
   } catch (error) {
