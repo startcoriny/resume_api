@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import LogMiddleware from "./src/middlewares/log.middleware.js";
 import ErrorHandlingMiddleware from "./src/middlewares/error-handling.middleware.js";
 import UserLouter from "./src/routes/user.router.js";
+import ResumeLouter from "./src/routes/resume.router.js";
 
 // .env 파일을 읽어서 process.env에 추가합니다.
 dotenv.config();
@@ -42,7 +43,7 @@ app.use(cookieParser());
 //   })
 // );
 
-app.use("/api", [UserLouter]);
+app.use("/api", [UserLouter, ResumeLouter]);
 app.use(ErrorHandlingMiddleware);
 
 app.listen(PORT, () => {
