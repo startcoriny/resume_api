@@ -4,9 +4,14 @@ import bcrypt from "bcrypt"; // 단방향 암호화 (비밀번호 암호화)
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import authMiddleware from "../middlewares/auth.middleware.js";
+import { startKakaoLogin, finishKakaoLogin } from "../kakao/kakaoLogin.js";
 
 dotenv.config();
 const router = express.Router();
+
+// 카카오 로그인 테스트
+router.get("/kakao/start", startKakaoLogin);
+router.get("/kakao/finish", finishKakaoLogin);
 
 /** ------------------------ 회원가입 ------------------------------ **/
 router.post("/sign-up", async (req, res, next) => {
