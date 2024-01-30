@@ -8,7 +8,7 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 dotenv.config();
 const router = express.Router();
 
-/** 회원가입 **/
+/** ------------------------ 회원가입 ------------------------------ **/
 router.post("/sign-up", async (req, res, next) => {
   try {
     const { email, password, passwordCheck, userName } = req.body;
@@ -32,10 +32,11 @@ router.post("/sign-up", async (req, res, next) => {
       });
     }
 
+    // 비밀번호 hash화 하기
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("hashedPassword 있는지 확인");
+
     // 유저 생성
-    const user = await prisma.$transaction(async (tx) => {
+    const createduser = await prisma.$transaction(async (tx) => {
       const user = await tx.users.create({
         data: {
           email,
@@ -44,10 +45,22 @@ router.post("/sign-up", async (req, res, next) => {
         },
       });
 
-      return user;
+      const userInfo = await tx.users.findFirst({
+        where: {
+          userId: user.userId,
+        },
+        select: {
+          userId: true,
+          email: true,
+          userName: true,
+        },
+      });
+
+      return userInfo;
     });
 
-    return res.status(201).json({ userInfo: [user.email, user.userName] });
+    // status 201상태(Created : 요청이 처리되어서 새로운 리소스가 생성)로 return
+    return res.status(201).json({ userInfo: createduser });
   } catch (err) {
     next(err);
   }
@@ -80,13 +93,17 @@ router.post("/sign-in", async (req, res) => {
   );
 
   res.cookie("authorization", `Bearer ${token}`); // authorization이라는 키에 표준 토큰 형식 값으로 넣는다.
+
+  // status 200상태(OK : 서버가 요청을 성공적으로 처리)로 return
   return res.status(200).json({ message: "로그인에 성공하였습니다." });
 });
 
 /** 내정보 조회 **/
-router.get("/myInfo", authMiddleware, async (req, res, next) => {
+router.get("/myInfo", authMiddleware, async (req, res) => {
+  // 토큰 검증을 끝내고 복호화 하여 전달된 userId를 사용
   const { userId } = req.user;
 
+  // 전달된 userId의 내용 검색
   const user = await prisma.users.findFirst({
     where: { userId: +userId },
     select: {
@@ -96,6 +113,7 @@ router.get("/myInfo", authMiddleware, async (req, res, next) => {
     },
   });
 
+  // status 200상태(OK : 서버가 요청을 성공적으로 처리)로 return
   return res.status(200).json({ data: user });
 });
 
