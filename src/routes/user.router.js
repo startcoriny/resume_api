@@ -10,6 +10,7 @@ dotenv.config();
 const router = express.Router();
 
 // 카카오 로그인 테스트
+// 브라우저 url에 쳐야함 동의하기때문. http://localhost:3000/api/kakao/start
 router.get("/kakao/start", startKakaoLogin);
 router.get("/kakao/finish", finishKakaoLogin);
 
@@ -71,7 +72,7 @@ router.post("/sign-up", async (req, res, next) => {
   }
 });
 
-/** 로그인 **/
+/** ---------------------------------- 로그인 --------------------------------------- **/
 router.post("/sign-in", async (req, res) => {
   // 이메일과 비밀번호로 로그인 요청
   const { email, password } = req.body;
@@ -103,7 +104,7 @@ router.post("/sign-in", async (req, res) => {
   return res.status(200).json({ message: "로그인에 성공하였습니다." });
 });
 
-/** 내정보 조회 **/
+/** ---------------------- 내정보 조회 --------------------------------- **/
 router.get("/myInfo", authMiddleware, async (req, res) => {
   // 토큰 검증을 끝내고 복호화 하여 전달된 userId를 사용
   const { userId } = req.user;

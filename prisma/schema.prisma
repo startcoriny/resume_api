@@ -16,6 +16,7 @@ model Users{
   email String @unique @map("email") // 유저 email
   password String @map("password") // 유저 Password
   userName String @map("userName") // 유저 Name
+  role Role @default(USER) @map("role") // 유저 기본값
 
   resume Resume[] // 사용자(Users) 테이블과 이력서 (Resume) 테이블 1:N 관계 설정.
   @@map("Users")
@@ -30,7 +31,6 @@ model Resume{
   context String @map("context") // 이력서 내용(자기소개)
   status Status @default(APPLY) @map("status") // 이력서 상태
   createdAt DateTime @default(now()) @map("createdAt") // 이력서 생성 날짜
-
   // Users 테이블과 관계설정.
   user Users @relation(fields: [userId], references: [userId], onDelete: Cascade) // join하여 유저이름 가져오기위한 관계설정.
   @@map("Resume")
@@ -43,4 +43,9 @@ enum Status { // , 쓰면 에러생김 ,쓰지 않고 정의하기.
   INTERVIEW1
   INTERVIEW2
   FINAL_PASS
+}
+
+enum Role{
+  USER
+  ADMIN
 }

@@ -23,9 +23,13 @@ router.post("/resume", authMiddleware, async (req, res, next) => {
 });
 
 /** -------------------------- 이력서 목록 조회 ------------------------------------ **/
-router.get("/resume", async (req, res, next) => {
+router.get("/resume", authMiddleware, async (req, res, next) => {
   // 쿼리 형태로 전달된 orderkey와 orderValue를 구조분해할당.
   let { orderKey, orderValue } = req.query;
+
+  if (orderKey === "") {
+    orderKey = "0";
+  }
 
   // 쿼리 형태로 전달된 ordervalue 초기화 안되어 있거나 정렬문자열이아니라면 desc로 초기화 시키기
   if (!orderValue || (orderValue.toLowerCase() !== "asc" && orderValue.toLowerCase() !== "desc")) {
@@ -102,10 +106,11 @@ router.patch("/resume/:resumeId", authMiddleware, async (req, res) => {
 
   // 수정할 이력서 정보는 본인이 작성한 이력서에 대해서만 수정.
   if (userId !== resume.userId) {
+    console.log("본인이 작성한 이력서가 아닙니다.");
     return res.status(400).json({ message: "본인이 작성한 이력서가 아닙니다." });
   }
 
-  // 검증이 끝난뒤 업데이트
+  // 검증이 끝난뒤 일반 회원일때 업데이트
   await prisma.resume.update({
     where: {
       resumeId: +resumeId,
