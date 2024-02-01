@@ -51,7 +51,7 @@ export default async function (req, res, next) {
           userId: user.userId, //payLoad에 userId를 인코딩 하여 넣는다
         },
         process.env.JWT_SECRET_KEY, // 지정된 비밀키를 사용하여 토큰을 서명
-        { expiresIn: "1h" } // 유효시간 12시간
+        { expiresIn: "12h" } // 유효시간 12시간
       );
       res.cookie("accessToken", `Bearer ${accessToken}`); // accessToken키에 표준 토큰 형식 값으로 넣는다.
 

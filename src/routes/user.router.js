@@ -95,7 +95,7 @@ router.post("/sign-in", async (req, res) => {
       userId: user.userId, //payLoad에 userId를 인코딩 하여 넣는다
     },
     process.env.JWT_SECRET_KEY, // 지정된 비밀키를 사용하여 토큰을 서명
-    { expiresIn: "1h" } // 유효시간 11시간
+    { expiresIn: "12h" } // 유효시간 12시간
   );
 
   // refreshToken 생성 (리프레시 토큰안에는 보통 토큰발급받았던 상태, 즉 기기상태 또는 IP가 담겨있음 여기선 email로 대체)
@@ -104,7 +104,7 @@ router.post("/sign-in", async (req, res) => {
       email: user.email, //payLoad에 userId를 인코딩 하여 넣는다
     },
     process.env.JWT_SECRET_KEY, // 지정된 비밀키를 사용하여 토큰을 서명
-    { expiresIn: "72h" } // 유효시간 72시간
+    { expiresIn: "168h" } // 유효시간 7일
   );
 
   // 리프레시 토큰 db삽입
