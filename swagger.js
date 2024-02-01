@@ -9,7 +9,7 @@ const doc = {
     description: "Description",
   },
   host: "54.180.121.240:3007",
-  schemes: ["https"],
+  schemes: ["http"],
 };
 // 경로 = localhost:3007/swagger
 const outputFile = "./swagger-output.json"; // swagger-autogen이 실행 후 생성될 파일 위치와 이름

@@ -8,7 +8,7 @@
   "host": "54.180.121.240:3007",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
     "/": {
