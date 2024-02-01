@@ -2,7 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
-import swaggerFile from "./swagger-output.json" with { type: "json" };
+import swaggerFile from "./swagger-output.json" assert { type: "json" };
 import LogMiddleware from "./src/middlewares/log.middleware.js";
 import ErrorHandlingMiddleware from "./src/middlewares/error-handling.middleware.js";
 import UserLouter from "./src/routes/user.router.js";
