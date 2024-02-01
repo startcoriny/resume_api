@@ -13,7 +13,7 @@ import AdminLouter from "./src/routes/admin.router.js";
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = 3007;
 app.get("/", (req, res) => {
   return res.status(200).json({ message: "안녕" });
 });
