@@ -8,7 +8,7 @@ const doc = {
     title: "My API",
     description: "Description",
   },
-  host: "54.180.121.240/:3007",
+  host: "54.180.121.240:3007",
   schemes: ["https"],
 };
 // 경로 = localhost:3007/swagger
