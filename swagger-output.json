@@ -23,7 +23,7 @@
     },
     "/api/kakao/start": {
       "get": {
-        "description": "카카오 로그인 브라우저에 경로 적어야됨.. http://localhost:3000/api/kakao/start",
+        "description": "카카오 로그인 브라우저에 경로 적어야됨.. http://localhost:3007/api/kakao/start",
         "responses": {
           "default": {
             "description": ""

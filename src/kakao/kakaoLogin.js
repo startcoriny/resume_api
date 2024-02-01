@@ -5,7 +5,7 @@ export const startKakaoLogin = (req, res) => {
   const baseUrl = "https://kauth.kakao.com/oauth/authorize"; // 인가 받는 베이스 url
   const config = {
     client_id: "104390bfe78a47ca4eb5921507bc127f", //REST API키
-    redirect_uri: "http://localhost:3000/api/kakao/finish", // Redirect URI경로
+    redirect_uri: "http://localhost:3007/api/kakao/finish", // Redirect URI경로
     response_type: "code",
   };
   const params = new URLSearchParams(config).toString();
@@ -26,7 +26,7 @@ export const finishKakaoLogin = async (req, res) => {
     client_id: process.env.KAKAO_CLIENT, // //REST API키
     client_secret: process.env.KAKAO_SECRET, // 카카오에서 받은 secret 키, 토큰 발급 시, 보안을 강화하기 위해 추가 확인하는 코드
     grant_type: "authorization_code",
-    redirect_uri: "http://localhost:3000/api/kakao/finish", // 토큰을 받은뒤 리 다이렉트할 URI
+    redirect_uri: "http://localhost:3007/api/kakao/finish", // 토큰을 받은뒤 리 다이렉트할 URI
     code: req.query.code, // startKakaoLogin이 끝나면 code=~~로 쿼리스트링으로 문자열이 들어옴.
   };
 
