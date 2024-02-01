@@ -41,10 +41,10 @@ export const finishKakaoLogin = async (req, res) => {
       },
     })
   ).json();
-  /** 토큰 받아온 것 확인하는 코드 위에 await().json()을 제거해주고 확인바람 **/
+  /** 토큰 받아온 것 확인하는 코드. 위에 await().json()을 제거해주고 확인바람 **/
   //   const json = await kakaoTokenRequest.json();
   //   console.log(json);
-  //   res.send(JSON.stringify(json)); // 프론트엔드에서 확인하려고
+  //   res.send(JSON.stringify(json)); // 프론트엔드에서 정보 확인
 
   if ("access_token" in kakaoTokenRequest) {
     // kakaoTokenRequest안에 access_Token이 있다면?
@@ -59,6 +59,7 @@ export const finishKakaoLogin = async (req, res) => {
       })
     ).json();
     console.log(userRequest);
+    return res.status(200).json({ message: userRequest });
   } else {
     // access 토큰이 없다면 로그인
     return res.status(401).json({ message: "로그인이 필요합니다." });

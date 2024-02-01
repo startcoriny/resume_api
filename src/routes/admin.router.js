@@ -4,13 +4,19 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-// 관리자 이력서 조회
+/*
+관리자 정보
+관리자 이메일 : 0000
+관리자 비밀번호 : 121212
+*/
+
+/** -------------------------------- 관리자 이력서 조회 -------------------------------------- **/
 router.get("/adminResumes", authMiddleware, async (req, res, next) => {
   let { orderValue } = req.query;
   const role = req.user.role;
 
   if (!(role === "ADMIN")) {
-    return res.status(400).json({ message: "권한이 존재하지 않습니다." });
+    return res.status(400).json({ message: "권한이 존재하지 않습니다. 관리자가 아닙니다." });
   }
 
   // 쿼리 형태로 전달된 ordervalue 초기화 안되어 있거나 정렬문자열이아니라면 desc로 초기화 시키기
@@ -40,7 +46,7 @@ router.get("/adminResumes", authMiddleware, async (req, res, next) => {
   return res.status(200).json({ data: resume });
 });
 
-// 관리자 수정
+/** ---------------------------------------- 관리자 수정 ---------------------------------------------- **/
 router.patch("/adminResumes/:resumeId", authMiddleware, async (req, res) => {
   const { resumeId } = req.params;
   const { status } = req.body;

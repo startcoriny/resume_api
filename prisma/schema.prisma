@@ -17,6 +17,7 @@ model Users{
   password String @map("password") // 유저 Password
   userName String @map("userName") // 유저 Name
   role Role @default(USER) @map("role") // 유저 기본값
+  token String? @map("token")
 
   resume Resume[] // 사용자(Users) 테이블과 이력서 (Resume) 테이블 1:N 관계 설정.
   @@map("Users")

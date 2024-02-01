@@ -4,8 +4,6 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 /** ------------------------------ 이력서 생성 ---------------------------------- **/
-// 사용자(Users)는 여러개의 이력서(resume)을 등록
-// 조건에 따라 사용자와 1:N의 관계를 가지고, 현재 로그인 한 사용자의 정보가 존재하였을 때만 이력서를 생성
 router.post("/resume", authMiddleware, async (req, res, next) => {
   const { userId } = req.user; // 사용자 인증 미들웨어(authMiddleware)를 통해 클라이언트가 로그인된 사용자인지 검증
   const { title, context } = req.body;
@@ -23,11 +21,12 @@ router.post("/resume", authMiddleware, async (req, res, next) => {
 });
 
 /** -------------------------- 이력서 목록 조회 ------------------------------------ **/
-router.get("/resume", authMiddleware, async (req, res, next) => {
+router.get("/resume", async (req, res, next) => {
   // 쿼리 형태로 전달된 orderkey와 orderValue를 구조분해할당.
   let { orderKey, orderValue } = req.query;
 
-  if (orderKey === "") {
+  // userId가 없거나 비어있으면 0으로 초기화
+  if (!orderValue || orderKey === "") {
     orderKey = "0";
   }
 
@@ -45,8 +44,8 @@ router.get("/resume", authMiddleware, async (req, res, next) => {
       resumeId: true,
       title: true,
       context: true,
+      // user 필드를 선택하여 사용자 정보에 접근.(join)
       user: {
-        // user 필드를 선택하여 사용자 정보에 접근.(join)
         select: {
           userName: true, // user의 userName 필드를 선택하여 사용자 이름을 추출합니다.
         },

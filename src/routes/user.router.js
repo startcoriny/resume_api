@@ -10,7 +10,7 @@ dotenv.config();
 const router = express.Router();
 
 // 카카오 로그인 테스트
-// 브라우저 url에 쳐야함 동의하기때문. http://localhost:3000/api/kakao/start
+// 브라우저 url에 쳐야함 동의해야 하기때문. http://localhost:3000/api/kakao/start
 router.get("/kakao/start", startKakaoLogin);
 router.get("/kakao/finish", finishKakaoLogin);
 
@@ -26,7 +26,7 @@ router.post("/sign-up", async (req, res, next) => {
       },
     });
 
-    // 유저가 있으면 메세지와 함께 반환
+    // 유저가 있으면 에러메세지와 함께 반환
     if (isExistuser) {
       return res.status(409).json({ message: "이미 존재하는 이메일 입니다." });
     }
@@ -89,23 +89,43 @@ router.post("/sign-in", async (req, res) => {
     return res.status(401).json({ message: "비밀번호가 일치하지 않습니다." });
   }
 
-  // 이메일과 비밀번호 다 통과가 된다면 토큰 발급
-  const token = jwt.sign(
+  // accessToken 생성
+  const accessToken = jwt.sign(
     {
       userId: user.userId, //payLoad에 userId를 인코딩 하여 넣는다
     },
     process.env.JWT_SECRET_KEY, // 지정된 비밀키를 사용하여 토큰을 서명
-    { expiresIn: "12h" } // 유효시간 12시간
+    { expiresIn: "1h" } // 유효시간 11시간
   );
 
-  res.cookie("authorization", `Bearer ${token}`); // authorization이라는 키에 표준 토큰 형식 값으로 넣는다.
+  // refreshToken 생성 (리프레시 토큰안에는 보통 토큰발급받았던 상태, 즉 기기상태 또는 IP가 담겨있음 여기선 email로 대체)
+  const reFreshToken = jwt.sign(
+    {
+      email: user.email, //payLoad에 userId를 인코딩 하여 넣는다
+    },
+    process.env.JWT_SECRET_KEY, // 지정된 비밀키를 사용하여 토큰을 서명
+    { expiresIn: "72h" } // 유효시간 72시간
+  );
+
+  // 리프레시 토큰 db삽입
+  await prisma.users.update({
+    where: {
+      userId: user.userId,
+    },
+    data: {
+      token: reFreshToken,
+    },
+  });
+
+  res.cookie("accessToken", `Bearer ${accessToken}`); // accessToken키에 표준 토큰 형식 값으로 넣는다.
+  res.cookie("reFreshToken", `Bearer ${reFreshToken}`); // reFreshToken키에 표준 토큰 형식 값으로 넣는다.
 
   // status 200상태(OK : 서버가 요청을 성공적으로 처리)로 return
   return res.status(200).json({ message: "로그인에 성공하였습니다." });
 });
 
 /** ---------------------- 내정보 조회 --------------------------------- **/
-router.get("/myInfo", authMiddleware, async (req, res) => {
+router.post("/myInfo", authMiddleware, async (req, res) => {
   // 토큰 검증을 끝내고 복호화 하여 전달된 userId를 사용
   const { userId } = req.user;
 
