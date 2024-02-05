@@ -12,32 +12,33 @@ datasource db {
 
 // Users(유저) Table
 model Users{
-  userId Int @id @default(autoincrement()) @map("userId") // 유저Id //타입지정할때 소문자 지정X
-  email String @unique @map("email") // 유저 email
-  password String @map("password") // 유저 Password
-  userName String @map("userName") // 유저 Name
-  role Role @default(USER) @map("role") // 유저 기본값
+  id Int @id @default(autoincrement()) @map("id")
+  email String @unique @map("email")
+  password String @map("password")
+  userName String @map("userName")
+  role Role @default(USER) @map("role")
   token String? @map("token")
 
-  resume Resume[] // 사용자(Users) 테이블과 이력서 (Resume) 테이블 1:N 관계 설정.
+  resume Resume[]
   @@map("Users")
 }
 
 
 // Resume(이력서) Table
 model Resume{
-  resumeId Int @id @default(autoincrement()) @map("resumeId") // 이력서 ID
-  userId Int @map("userId") // 유저 ID
-  title String @map("title") // 이력서 제목
-  context String @map("context") // 이력서 내용(자기소개)
-  status Status @default(APPLY) @map("status") // 이력서 상태
-  createdAt DateTime @default(now()) @map("createdAt") // 이력서 생성 날짜
+  id Int @id @default(autoincrement()) @map("id")
+  user_id Int @map("user_id")
+  title String @map("title")
+  context String @map("context")
+  status Status @default(APPLY) @map("status")
+  createdAt DateTime @default(now()) @map("createdAt")
+  
   // Users 테이블과 관계설정.
-  user Users @relation(fields: [userId], references: [userId], onDelete: Cascade) // join하여 유저이름 가져오기위한 관계설정.
+  user Users @relation(fields: [user_id], references: [id], onDelete: Cascade)
   @@map("Resume")
 }
 
-enum Status { // , 쓰면 에러생김 ,쓰지 않고 정의하기.
+enum Status {
   APPLY
   DROP
   PASS
