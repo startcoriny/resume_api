@@ -44,7 +44,7 @@ router.post("/sign-up", async (req, res, next) => {
 
       const userInfo = await tx.users.findFirst({
         where: {
-          id: user.id,
+          sdsdid: user.id,
         },
         select: {
           id: true,
@@ -82,7 +82,7 @@ router.post("/sign-in", async (req, res) => {
     { expiresIn: "12h" }
   );
 
-  const reFreshToken = jwt.sign(
+  const refreshToken = jwt.sign(
     {
       email: user.email,
     },
@@ -95,12 +95,12 @@ router.post("/sign-in", async (req, res) => {
       id: user.id,
     },
     data: {
-      token: reFreshToken,
+      token: refreshToken,
     },
   });
 
   res.cookie("accessToken", `Bearer ${accessToken}`);
-  res.cookie("reFreshToken", `Bearer ${reFreshToken}`);
+  res.cookie("refreshToken", `Bearer ${refreshToken}`);
 
   return res.status(200).json({ message: "로그인에 성공하였습니다." });
 });

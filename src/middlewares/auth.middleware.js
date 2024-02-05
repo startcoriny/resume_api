@@ -5,14 +5,14 @@ import { prisma } from "../utils/prisma/index.js";
 
 export default async function (req, res, next) {
   try {
-    let { accessToken, reFreshToken } = req.cookies;
+    let { accessToken, refreshToken } = req.cookies;
     let resetAccess = accessToken;
 
-    if (!reFreshToken) {
+    if (!refreshToken) {
       throw new Error("토큰이 존재하지 않습니다.");
     }
 
-    const refresh = await tokencheck(reFreshToken);
+    const refresh = await tokencheck(refreshToken);
     const isExistToken = await prisma.users.findFirst({
       where: {
         token: refresh,
@@ -50,14 +50,14 @@ export default async function (req, res, next) {
     });
 
     if (!user) {
-      res.clearCookie("reFreshToken");
+      res.clearCookie("refreshToken");
       res.clearCookie("accessToken");
       throw new Error("토큰 사용자가 존재하지 않습니다.");
     }
     req.user = user;
     next();
   } catch (error) {
-    res.clearCookie("reFreshToken");
+    res.clearCookie("refreshToken");
     res.clearCookie("accessToken");
     switch (error.name) {
       case "TokenExpiredError":
