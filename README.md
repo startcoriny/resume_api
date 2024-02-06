@@ -1,6 +1,6 @@
 # resume_api경로
- - <a href="http://54.180.121.240:3007/">resume api<a>
- - <a href="http://54.180.121.240:3007/swagger">resume api swagger<a>
+ - <a href="http://54.180.121.240:3005/">resume api<a>
+ - <a href="http://54.180.121.240:3005/swagger">resume api swagger<a>
 
 # 환경변수
 - .env 파일에 어떤 환경변수가 추가되어야 하는지 작성합니다.
