@@ -25,7 +25,7 @@ router.get("/adminResumes", authMiddleware, async (req, res, next) => {
 
   const resume = await prisma.resume.findMany({
     select: {
-      resumeId: true,
+      id: true,
       title: true,
       context: true,
       user: {
@@ -52,7 +52,7 @@ router.patch("/adminResumes/:resumeId", authMiddleware, async (req, res) => {
 
   const resume = await prisma.resume.findFirst({
     where: {
-      resumeId: +resumeId,
+      id: +resumeId,
     },
   });
 
@@ -66,7 +66,7 @@ router.patch("/adminResumes/:resumeId", authMiddleware, async (req, res) => {
 
   await prisma.resume.update({
     where: {
-      resumeId: +resumeId,
+      id: +resumeId,
     },
     data: {
       status,

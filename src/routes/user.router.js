@@ -44,7 +44,7 @@ router.post("/sign-up", async (req, res, next) => {
 
       const userInfo = await tx.users.findFirst({
         where: {
-          sdsdid: user.id,
+          id: user.id,
         },
         select: {
           id: true,
